@@ -4,15 +4,6 @@ class ReviewsController < ApplicationController
 
   respond_to :html
 
-  def index
-    @reviews = Review.all
-    respond_with(@reviews)
-  end
-
-  def show
-    respond_with(@review)
-  end
-
   def new
     @review = Review.new
     respond_with(@review)
@@ -24,8 +15,13 @@ class ReviewsController < ApplicationController
   def create
     @review = Review.new(review_params)
     @review.user_id = current_user.id
-    @review.save
-    respond_with(@review)
+
+    respond_to do |format|
+      if @review.save
+        format.html { redirect_to root_path, notice: 'Review was successfully created.' }
+        format.json { render :show, status: :created, location: @review }
+      end
+    end
   end
 
   def update
