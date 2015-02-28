@@ -18,12 +18,11 @@ class ReviewsController < ApplicationController
     @review = Review.new(review_params)
     @review.user_id = current_user.id
     @review.restaurant_id = @restaurant.id
-    respond_to do |format|
       if @review.save
-        format.html { redirect_to @restaurant, notice: 'Review was successfully created.' }
-        format.json { render :show, status: :created, location: @review }
+       redirect_to @restaurant, notice: 'Review was successfully created.'
+      else
+        render 'new'
       end
-    end
   end
 
   def update
